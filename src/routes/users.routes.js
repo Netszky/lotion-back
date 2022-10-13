@@ -10,4 +10,6 @@ router.post('/users', addUserValidation, user.create);
 //Connexion
 router.post('/users/login', user.login);
 
+router.delete('/users', verifyToken, user.deleteUser)
+
 module.exports = router;
