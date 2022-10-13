@@ -6,8 +6,8 @@ const configs = require("../configs/jwt.configs");
 exports.create = (req, res) => {
   let hasedPassword = bcrypt.hashSync(req.body.password, 10);
   const user = new User({
-    lastName: req.body.lastname,
-    firstName: req.body.firstname,
+    lastname: req.body.lastname,
+    firstname: req.body.firstname,
     email: req.body.email,
     password: hasedPassword,
     subscription: null,
