@@ -1,4 +1,5 @@
 # lotion-back
 
-# main -> prod
+# main -> Vercel
+# prod -> Prod
 # preProd -> preProd
