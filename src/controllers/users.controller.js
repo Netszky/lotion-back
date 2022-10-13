@@ -126,7 +126,7 @@ exports.updateUser = (req, res) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-  User.deleteOne({ _id: req.params.id })
+  User.deleteOne({ _id: req.user.id })
     .then(() => {
       res.status(200).json({
         message: "Utilisateur supprimé",
