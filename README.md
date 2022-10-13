@@ -1,5 +1,8 @@
 # lotion-back
 
 # main -> Vercel
-# prod -> Prod
 # preProd -> preProd
+# dev -> develop
+
+# Ne pas oublier :
+# - npm i
