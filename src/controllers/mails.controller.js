@@ -24,7 +24,7 @@ exports.resetPassword = (req, res) => {
       const token = NewToken(user);
       updateUserResetToken(user, token)
         .then((newUser) => {
-          const email = sendEmail(newUser, token);
+          const email = sendEmail(newUser, token, 4276684, "Réinitialisation");
           if (email.message === "Email Send") {
             res.status(200).send({
               status: 200,
