@@ -4,7 +4,7 @@ exports.create = (req, res) => {
     const dossier = new Dossier({
         notes: null,
         sousdossier: null,
-        // user: req.user._id,
+        user: req.body.id,
         level: req.body.level,
         parent: req.body.parent,
         name: req.body.name
@@ -36,5 +36,14 @@ exports.getLevel1 = (req, res) => {
     }).catch((err) => {
         res.status(500).send(err)
     })
-}
-// .populate("sousdossier").populate("notes")
+};
+
+exports.getFolder = (req, res) => {
+    Dossier.findById(req.query.id).populate("notes")
+        .then((data) => {
+            res.status(200).send(data)
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send(err)
+        })
+};

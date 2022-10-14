@@ -5,6 +5,7 @@ const verifyToken = require('../middlewares/verifyToken');
 
 router.post('/dossier', dossier.create);
 router.get("/dossiers", dossier.getAll);
+router.get("/dossierbyid", dossier.getFolder)
 router.get("/dossiers1", dossier.getLevel1);
 
 module.exports = router;

@@ -47,6 +47,7 @@ exports.create = (req, res) => {
       res.send({
         token: userToken,
         auth: true,
+        user: user
       });
     })
     .catch((err) => {
@@ -88,6 +89,7 @@ exports.login = (req, res) => {
           }
         );
         res.status(200).send({
+          user: user,
           auth: true,
           token: userToken,
           isAdmin: user.isAdmin,
@@ -129,7 +131,7 @@ exports.findOne = (req, res) => {
       }
       return res.send(user);
     })
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.send(err));
 };
 
 exports.getUserAll = (req, res) => {
