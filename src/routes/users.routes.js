@@ -16,6 +16,10 @@ router.get('/user', verifyToken, user.findOne)
 //MAJ user
 router.put('/users/update', verifyToken, user.updateUser);
 
+router.post('/users/updatePassword', user.updatePassword)
+
 router.delete('/users', verifyToken, user.deleteUser)
+
 router.get("/users/verifyToken", verifyToken, user.verifyToken);
+
 module.exports = router;

@@ -122,6 +122,7 @@ exports.findEmail = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+  //Via middleware
   User.findById(req.user.id)
     .then((user) => {
       if (!user) {
@@ -154,6 +155,24 @@ exports.updateUser = (req, res) => {
       res.send({ user: data });
     })
     .catch((err) => res.status(500).json({ err: err }));
+};
+
+exports.updatePassword = (req, res) => {
+  if (req.body.password) {
+    const hasedPassword = bcrypt.hashSync(req.body.password, 10);
+    User.findOneAndUpdate(
+      { resetToken: req.body.token },
+      { password: hasedPassword },
+      {
+        new: true,
+        omitUndefined: true,
+      }
+    )
+      .then(() => {
+        res.status(201);
+      })
+      .catch((err) => res.status(500).json({ err: err }));
+  }
 };
 
 exports.deleteUser = (req, res, next) => {
