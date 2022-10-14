@@ -60,7 +60,7 @@ exports.login = (req, res) => {
       else {
         let userToken = jwt.sign(
           {
-            id: user._id,
+            user: user,
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
