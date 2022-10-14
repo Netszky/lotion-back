@@ -15,24 +15,24 @@ exports.create = (req, res) => {
   user
     .save()
     .then((data) => {
-      const dossierCorbeille = new Dossier({
-        name: "Corbeille",
-        level: 1,
-        user: data._id,
-        parent: null
-      }).save()
-      const dossierArchive = new Dossier({
-        name: "Archive",
-        level: 1,
-        user: data._id,
-        parent: null
-      }).save()
-      const dossierBrouillon = new Dossier({
-        name: "Brouillon",
-        level: 1,
-        user: data._id,
-        parent: null
-      }).save()
+      // const dossierCorbeille = new Dossier({
+      //   name: "Corbeille",
+      //   level: 1,
+      //   user: data._id,
+      //   parent: null
+      // }).save()
+      // const dossierArchive = new Dossier({
+      //   name: "Archive",
+      //   level: 1,
+      //   user: data._id,
+      //   parent: null
+      // }).save()
+      // const dossierBrouillon = new Dossier({
+      //   name: "Brouillon",
+      //   level: 1,
+      //   user: data._id,
+      //   parent: null
+      // }).save()
 
       let userToken = jwt.sign(
         {
