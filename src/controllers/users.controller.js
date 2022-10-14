@@ -2,7 +2,7 @@ const User = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const configs = require("../configs/jwt.configs");
-
+const Dossier = require('../models/dossier.model');
 exports.create = (req, res) => {
   let hasedPassword = bcrypt.hashSync(req.body.password, 10);
   const user = new User({
@@ -15,9 +15,28 @@ exports.create = (req, res) => {
   user
     .save()
     .then((data) => {
+      const dossierCorbeille = new Dossier({
+        name: "Corbeille",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+      const dossierArchive = new Dossier({
+        name: "Archive",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+      const dossierBrouillon = new Dossier({
+        name: "Brouillon",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+
       let userToken = jwt.sign(
         {
-          id: data._id,
+          user: user,
           auth: true,
         },
         configs.jwt.secret,
@@ -28,6 +47,7 @@ exports.create = (req, res) => {
       res.send({
         token: userToken,
         auth: true,
+        user: user
       });
     })
     .catch((err) => {
@@ -46,11 +66,21 @@ exports.login = (req, res) => {
           message: "password not valid",
           auth: false,
           token: null,
+          status: 401
         });
-      } else {
+      }
+      if (user === null || undefined) {
+        return res.status(401).send({
+          message: "user not valid",
+          auth: false,
+          token: null,
+          status: 401
+        });
+      }
+      else {
         let userToken = jwt.sign(
           {
-            id: user._id,
+            user: user,
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
@@ -59,6 +89,7 @@ exports.login = (req, res) => {
           }
         );
         res.status(200).send({
+          user: user,
           auth: true,
           token: userToken,
           isAdmin: user.isAdmin,
@@ -67,6 +98,26 @@ exports.login = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send(err);
+    });
+};
+
+exports.findEmail = (req, res) => {
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (user != null) {
+        res.status(200).send({
+          getMail: true,
+        });
+      } else {
+        res.status(200).send({
+          getMail: false,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(404).send({
+        getMail: false,
+      });
     });
 };
 
@@ -136,4 +187,16 @@ exports.deleteUser = (req, res, next) => {
         error: error,
       });
     });
+};
+
+exports.verifyToken = (req, res) => {
+  if (req.user) {
+    res.status(200).send({
+      verify: true
+    })
+  } else {
+    res.status(401).send({
+      verify: false
+    })
+  };
 };
