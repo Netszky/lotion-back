@@ -148,3 +148,15 @@ exports.deleteUser = (req, res, next) => {
       });
     });
 };
+
+exports.verifyToken = (req, res) => {
+  if (req.user) {
+    res.status(200).send({
+      verify: true
+    })
+  } else {
+    res.status(401).send({
+      verify: false
+    })
+  };
+};
