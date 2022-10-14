@@ -25,3 +25,16 @@ exports.getAll = (req, res) => {
         res.status(500).send(err)
     })
 };
+exports.getLevel1 = (req, res) => {
+    Dossier.find({
+        $and: [
+            { user: { $eq: req.query.id } },
+            { level: { $eq: 1 } },
+        ]
+    }).then((data) => {
+        res.status(200).send(data)
+    }).catch((err) => {
+        res.status(500).send(err)
+    })
+}
+// .populate("sousdossier").populate("notes")
