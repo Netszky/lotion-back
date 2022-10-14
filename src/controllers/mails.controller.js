@@ -22,22 +22,24 @@ exports.resetPassword = (req, res) => {
   findByEmail(req.body.email)
     .then((user) => {
       const token = NewToken(user);
-      const data = updateUserResetToken(user, token)
-      console.log("Je suis data = ",data);
-      return
-      console.log("Je suis user = ", user);
-      const email = sendEmail(user);
-      if (email.message === "Email Send") {
-        res.status(200).send({
-          status: 200,
-          message: email.message,
+      updateUserResetToken(user, token)
+        .then((newUser) => {
+          const email = sendEmail(newUser, token);
+          if (email.message === "Email Send") {
+            res.status(200).send({
+              status: 200,
+              message: email.message,
+            });
+          } else {
+            res.status(500).send({
+              status: 500,
+              message: email.message,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      } else {
-        res.status(500).send({
-          status: 500,
-          message: email.message,
-        });
-      }
     })
     .catch((err) => {
       console.log(err);

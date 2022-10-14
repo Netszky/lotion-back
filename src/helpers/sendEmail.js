@@ -1,7 +1,6 @@
 const key = require("../configs/mailjet.config");
 
-const sendEmail = (body) => {
-    console.log("Je suis body = ",body);
+const sendEmail = (body, token) => {
   try {
     const Mailjet = require("node-mailjet");
     const mailjet = new Mailjet({
@@ -31,7 +30,7 @@ const sendEmail = (body) => {
             email: body.email,
             message: body.message,
             //add url to page redirection
-            url: "google.com",
+            url: `http://localhost:3000/reset-password?token=${token}`,
           },
         },
       ],

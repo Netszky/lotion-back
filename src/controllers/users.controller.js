@@ -71,6 +71,7 @@ exports.login = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+  //Via middleware
   User.findById(req.user.id)
     .then((user) => {
       if (!user) {
@@ -104,6 +105,22 @@ exports.updateUser = (req, res) => {
     })
     .catch((err) => res.status(500).json({ err: err }));
 };
+
+// exports.updatePassword = (req, res) => {
+//   //Via middleware
+//   User.findById(req.user.id)
+//     .then((user) => {
+//       if (!user) {
+//         res.status(404).send({
+//           message: `Votre User id ${req.user.id} n'a pas été trouvé`,
+//         });
+//       }
+//       //Comparer user.resetToken
+//       console.log("Je suis user = ",user);
+//       return
+//     })
+//     .catch((err) => res.send(err));
+// };
 
 exports.deleteUser = (req, res, next) => {
   User.deleteOne({ _id: req.user.id })
