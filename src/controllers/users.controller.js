@@ -169,7 +169,9 @@ exports.updatePassword = (req, res) => {
       }
     )
       .then(() => {
-        res.status(201);
+        res.status(201).send({
+          updatePassword: true
+        });
       })
       .catch((err) => res.status(500).json({ err: err }));
   }
