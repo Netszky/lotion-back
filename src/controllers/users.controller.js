@@ -110,7 +110,7 @@ exports.findOne = (req, res) => {
       }
       return res.send(user);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => res.status(500).send(err));
 };
 
 exports.getUserAll = (req, res) => {
