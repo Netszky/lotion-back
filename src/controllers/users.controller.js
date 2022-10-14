@@ -48,7 +48,16 @@ exports.login = (req, res) => {
           token: null,
           status: 401
         });
-      } else {
+      }
+      if (user === null || undefined) {
+        return res.status(401).send({
+          message: "user not valid",
+          auth: false,
+          token: null,
+          status: 401
+        });
+      }
+      else {
         let userToken = jwt.sign(
           {
             id: user._id,
