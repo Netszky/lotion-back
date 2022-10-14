@@ -46,6 +46,7 @@ exports.login = (req, res) => {
           message: "password not valid",
           auth: false,
           token: null,
+          status: 401
         });
       } else {
         let userToken = jwt.sign(
@@ -66,7 +67,7 @@ exports.login = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(404).send(err);
+      res.status(500).send(err);
     });
 };
 
