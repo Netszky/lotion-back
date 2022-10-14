@@ -106,21 +106,23 @@ exports.updateUser = (req, res) => {
     .catch((err) => res.status(500).json({ err: err }));
 };
 
-// exports.updatePassword = (req, res) => {
-//   //Via middleware
-//   User.findById(req.user.id)
-//     .then((user) => {
-//       if (!user) {
-//         res.status(404).send({
-//           message: `Votre User id ${req.user.id} n'a pas été trouvé`,
-//         });
-//       }
-//       //Comparer user.resetToken
-//       console.log("Je suis user = ",user);
-//       return
-//     })
-//     .catch((err) => res.send(err));
-// };
+exports.updatePassword = (req, res) => {
+  if (req.body.password) {
+    const hasedPassword = bcrypt.hashSync(req.body.password, 10);
+    User.findOneAndUpdate(
+      { resetToken: req.body.token },
+      { password: hasedPassword },
+      {
+        new: true,
+        omitUndefined: true,
+      }
+    )
+      .then(() => {
+        res.status(201);
+      })
+      .catch((err) => res.status(500).json({ err: err }));
+  }
+};
 
 exports.deleteUser = (req, res, next) => {
   User.deleteOne({ _id: req.user.id })

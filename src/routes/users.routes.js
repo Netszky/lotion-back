@@ -12,5 +12,8 @@ router.post('/users/login', user.login);
 
 router.put('/users/update', verifyToken, user.updateUser);
 
+router.post('/users/updatePassword', user.updatePassword)
+
 router.delete('/users', verifyToken, user.deleteUser)
+
 module.exports = router;
