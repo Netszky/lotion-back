@@ -2,7 +2,9 @@ const User = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const configs = require("../configs/jwt.configs");
-const Dossier = require('../models/dossier.model');
+const Dossier = require("../models/dossier.model");
+const sendEmail = require("../helpers/sendEmail");
+
 exports.create = (req, res) => {
   let hasedPassword = bcrypt.hashSync(req.body.password, 10);
   const user = new User({
@@ -15,25 +17,6 @@ exports.create = (req, res) => {
   user
     .save()
     .then((data) => {
-      // const dossierCorbeille = new Dossier({
-      //   name: "Corbeille",
-      //   level: 1,
-      //   user: data._id,
-      //   parent: null
-      // }).save()
-      // const dossierArchive = new Dossier({
-      //   name: "Archive",
-      //   level: 1,
-      //   user: data._id,
-      //   parent: null
-      // }).save()
-      // const dossierBrouillon = new Dossier({
-      //   name: "Brouillon",
-      //   level: 1,
-      //   user: data._id,
-      //   parent: null
-      // }).save()
-
       let userToken = jwt.sign(
         {
           user: user,
@@ -44,11 +27,19 @@ exports.create = (req, res) => {
           expiresIn: 86400,
         }
       );
-      res.send({
-        token: userToken,
-        auth: true,
-        user: user
-      });
+      const email = sendEmail(user, userToken, 4278254, "Bienvenue");
+      if (email.message === "Email Send") {
+        res.send({
+          token: userToken,
+          auth: true,
+          user: user,
+        });
+      } else {
+        res.status(500).send({
+          status: 500,
+          message: email.message,
+        });
+      }
     })
     .catch((err) => {
       res.status(500).send({
@@ -66,7 +57,7 @@ exports.login = (req, res) => {
           message: "password not valid",
           auth: false,
           token: null,
-          status: 401
+          status: 401,
         });
       }
       if (user === null || undefined) {
@@ -74,10 +65,9 @@ exports.login = (req, res) => {
           message: "user not valid",
           auth: false,
           token: null,
-          status: 401
+          status: 401,
         });
-      }
-      else {
+      } else {
         let userToken = jwt.sign(
           {
             user: user,
@@ -122,6 +112,7 @@ exports.findEmail = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+  //Via middleware
   User.findById(req.user.id)
     .then((user) => {
       if (!user) {
@@ -147,13 +138,33 @@ exports.getUserAll = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.user.id, req.body, {
+  User.findByIdAndUpdate(req.user.user._id, req.body, {
     new: true,
   })
     .then((data) => {
       res.send({ user: data });
     })
     .catch((err) => res.status(500).json({ err: err }));
+};
+
+exports.updatePassword = (req, res) => {
+  if (req.body.password) {
+    const hasedPassword = bcrypt.hashSync(req.body.password, 10);
+    User.findOneAndUpdate(
+      { resetToken: req.body.token },
+      { password: hasedPassword },
+      {
+        new: true,
+        omitUndefined: true,
+      }
+    )
+      .then(() => {
+        res.status(201).send({
+          updatePassword: true,
+        });
+      })
+      .catch((err) => res.status(500).json({ err: err }));
+  }
 };
 
 exports.deleteUser = (req, res, next) => {
@@ -173,11 +184,11 @@ exports.deleteUser = (req, res, next) => {
 exports.verifyToken = (req, res) => {
   if (req.user) {
     res.status(200).send({
-      verify: true
-    })
+      verify: true,
+    });
   } else {
     res.status(401).send({
-      verify: false
-    })
-  };
+      verify: false,
+    });
+  }
 };
