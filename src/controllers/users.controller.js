@@ -66,27 +66,7 @@ exports.login = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(404).send(err);
-    });
-};
-
-exports.findEmail = (req, res) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (user != null) {
-        res.status(200).send({
-          getMail: true,
-        });
-      } else {
-        res.status(200).send({
-          getMail: false,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(404).send({
-        getMail: false,
-      });
+      res.status(500).send(err);
     });
 };
 
