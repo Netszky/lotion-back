@@ -46,6 +46,7 @@ exports.login = (req, res) => {
           message: "password not valid",
           auth: false,
           token: null,
+          status: 401
         });
       } else {
         let userToken = jwt.sign(
