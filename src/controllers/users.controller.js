@@ -2,7 +2,7 @@ const User = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const configs = require("../configs/jwt.configs");
-
+const Dossier = require('../models/dossier.model');
 exports.create = (req, res) => {
   let hasedPassword = bcrypt.hashSync(req.body.password, 10);
   const user = new User({
@@ -15,9 +15,28 @@ exports.create = (req, res) => {
   user
     .save()
     .then((data) => {
+      const dossierCorbeille = new Dossier({
+        name: "Corbeille",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+      const dossierArchive = new Dossier({
+        name: "Archive",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+      const dossierBrouillon = new Dossier({
+        name: "Brouillon",
+        level: 1,
+        user: data._id,
+        parent: null
+      }).save()
+
       let userToken = jwt.sign(
         {
-          id: data._id,
+          user: user,
           auth: true,
         },
         configs.jwt.secret,
