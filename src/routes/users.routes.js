@@ -10,6 +10,10 @@ router.post('/users', addUserValidation, user.create);
 //Connexion
 router.post('/users/login', user.login);
 
+//Recuperation via Id
+router.get('/user', verifyToken, user.findOne)
+
+//MAJ user
 router.put('/users/update', verifyToken, user.updateUser);
 
 router.delete('/users', verifyToken, user.deleteUser)
