@@ -1,6 +1,7 @@
 const key = require("../configs/mailjet.config");
 
-const sendEmail = (body, token) => {
+const sendEmail = (body, token, templateID, subject) => {
+    console.log("Je suis body = ",body);
   try {
     const Mailjet = require("node-mailjet");
     const mailjet = new Mailjet({
@@ -21,9 +22,9 @@ const sendEmail = (body, token) => {
               Name: body.firstname,
             },
           ],
-          TemplateID: 4276684,
+          TemplateID: templateID,
           TemplateLanguage: true,
-          Subject: "Re",
+          Subject: subject,
           Variables: {
             firstname: body.firstname,
             name: body.lastname,
