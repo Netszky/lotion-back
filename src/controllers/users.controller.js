@@ -148,7 +148,7 @@ exports.getUserAll = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.user.id, req.body, {
+  User.findByIdAndUpdate(req.user.user._id, req.body, {
     new: true,
   })
     .then((data) => {
