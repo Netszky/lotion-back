@@ -21,6 +21,6 @@ const dossierSchema = new Schema({
     },
     parent: {
         type: Schema.Types.ObjectId, ref: "Dossier"
-    }
+    },
 });
 module.exports = mongoose.model("Dossier", dossierSchema);

@@ -11,7 +11,7 @@ const notesSchema = new Schema({
     }],
     status: {
         type: Number,
-        default: 4
+        default: 3
     },
     url: {
         type: String,
@@ -24,6 +24,9 @@ const notesSchema = new Schema({
     modified: {
         type: Date,
         default: Date.now()
+    },
+    user: {
+        type: Schema.Types.ObjectId, ref: "User"
     }
 });
 module.exports = mongoose.model("Notes", notesSchema);

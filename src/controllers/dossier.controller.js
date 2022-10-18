@@ -2,8 +2,8 @@ const Dossier = require("../models/dossier.model");
 
 exports.create = (req, res) => {
     const dossier = new Dossier({
-        notes: null,
-        sousdossier: null,
+        notes: [],
+        sousdossier: [],
         user: req.body.id,
         level: req.body.level,
         parent: req.body.parent,
