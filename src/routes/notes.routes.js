@@ -10,5 +10,7 @@ router.get('/note-status', note.getByStatus);
 router.put('/note-trash', note.addToTrash);
 router.put('/note-draft', note.addToDraft);
 router.put('/note-archive', note.addToArchive);
+router.get("/note-folder", note.getNoteByFolder);
+router.put('/note-activate', note.activate);
 
 module.exports = router;
