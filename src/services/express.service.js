@@ -9,6 +9,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use("*", cors());
 
+app.use(function (req, res, next) {
+  if (req.originalUrl === '/api/v1/webhook/stripe') {
+      next();
+  } else {
+      express.json()(req, res, next);
+  }
+});
 app.use("/api/v1", apiRouter);
 
 exports.start = () => {
