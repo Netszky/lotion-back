@@ -1,7 +1,7 @@
 const config = require("../configs/stripe.configs");
 const stripe = require("stripe")(config.stripe.key);
 const User = require("../models/users.model");
-// const Subscription = require("../models/subscription.model");
+const Subscription = require("../models/subscription.model");
 // const mailjet = require("../services/mailjet.service");
 
 const webhookSecret = config.stripe.webhook_secret;
@@ -35,23 +35,23 @@ exports.stripewebhook = (req, res) => {
     case "customer.subscription.created":
       const customerSubscription = data.object;
       console.log("je suis customerSubscription = ", customerSubscription);
-      //   const sub = new Subscription({
-      //     dateSub: Date.now(),
-      //     idStripeSub: customerSubscription.id,
-      //     user: customerSubscription.metadata.user,
-      //     price: customerSubscription.metadata.price,
-      //   });
+      const sub = new Subscription({
+        active: true,
+        subName: data.object.plan.id
+      }
+      );
       sub
         .save()
         .then((data) => {
           User.findByIdAndUpdate(
-            customerSubscription.metadata.user,
+            customerSubscription.metadata.userId,
             {
-              subscription: data.id,
+              subscription: data._id,
               isSub: true,
+              stripeID: data.object.id
             },
             {
-              new: true,
+              omitUndefined: true,
             }
           ).then(() => {
             mailjet.sendMailSub(
@@ -72,22 +72,13 @@ exports.stripewebhook = (req, res) => {
         customerSubscriptionDeleted.metadata.user,
         {
           isSub: false,
-          superSub: false,
-          subscription: null,
         },
         {
           new: true,
         }
       ).then((data) => {
         mailjet.sendMailUnsub(data.email);
-        Subscription.findOneAndDelete(
-          { idStripeSub: customerSubscriptionDeleted.id },
-          function (err, docs) {
-            if (err) {
-              console.log(err);
-            }
-          }
-        );
+        Subscription.findByIdAndDelete(data.subscription);
       });
       break;
     default:
