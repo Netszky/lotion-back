@@ -47,3 +47,12 @@ exports.getFolder = (req, res) => {
             res.status(500).send(err)
         })
 };
+exports.getSub = (req, res) => {
+    Dossier.find({
+        parent: { $eq: req.query.parent }
+    }).then((data) => {
+        res.status(200).send(data)
+    }).catch((err) => {
+        res.status(500).send(err)
+    })
+}

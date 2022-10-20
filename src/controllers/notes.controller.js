@@ -4,9 +4,10 @@ exports.create = (req, res) => {
     const note = new Notes({
         user: req.body.user,
         name: req.body.name,
-        status: 4,
+        status: 3,
         url: null,
-        elements: null
+        elements: null,
+        dossier: req.body.dossier
     })
     note.save()
         .then((data) => {
@@ -30,15 +31,23 @@ exports.update = (req, res) => {
 
 }
 exports.delete = async (req, res) => {
-    await Notes.findByIdAndDelete(req.body.id).then((data) => {
-        res.status(200).send({
-            message: "Deleted"
+    const exist = await Notes.exists({ _id: req.query.id })
+    console.log(req.query.id);
+    if (exist) {
+        await Notes.findByIdAndDelete(req.query.id).then((data) => {
+            res.status(200).send({
+                message: "Deleted"
+            })
+        }).catch((err) => {
+            res.status(500).send({
+                message: "Note Introuvable"
+            })
         })
-    }).catch((err) => {
+    } else {
         res.status(500).send({
-            message: "Note Introuvable"
+            message: "Objet Introuvable"
         })
-    })
+    }
 };
 exports.getByStatus = (req, res) => {
     Notes.find({
@@ -54,7 +63,6 @@ exports.getByStatus = (req, res) => {
 };
 
 exports.addToTrash = (req, res) => {
-    console.log("ici", req.body.id);
     Notes.findByIdAndUpdate(req.body.id, {
         status: 4
     }, { omitUndefined: true })
@@ -84,3 +92,25 @@ exports.addToArchive = (req, res) => {
             res.status(500).send(err)
         })
 };
+exports.getNoteByFolder = (req, res) => {
+    Notes.find({
+        $and: [
+            { dossier: { $eq: req.query.dossier } },
+            { status: { $eq: 1 } }
+        ]
+    }).then((data) => {
+        res.status(200).send(data)
+    }).catch((err) => {
+        console.log(err);
+    })
+};
+exports.activate = (req, res) => {
+    Notes.findByIdAndUpdate(req.body.id, {
+        status: 1
+    }, { omitUndefined: true })
+        .then((data) => {
+            res.status(200).send(data)
+        }).catch((err) => {
+            res.status(500).send(err)
+        })
+}

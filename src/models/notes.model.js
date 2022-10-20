@@ -27,6 +27,9 @@ const notesSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId, ref: "User"
+    },
+    dossier: {
+        type: Schema.Types.ObjectId, ref: "Dossier"
     }
 });
 module.exports = mongoose.model("Notes", notesSchema);

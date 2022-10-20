@@ -7,6 +7,6 @@ router.post('/dossier', dossier.create);
 router.get("/dossiers", dossier.getAll);
 router.get("/dossierbyid", dossier.getFolder)
 router.get("/dossiers1", dossier.getLevel1);
-// router.delete("/")
+router.get("/dossier-sub", dossier.getSub);
 
 module.exports = router;
