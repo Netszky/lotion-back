@@ -45,12 +45,13 @@ exports.stripewebhook = (req, res) => {
       sub
         .save()
         .then(async (data) => {
-          console.log("SIIIIIUKID", customerSubscription.metadata.userId);
+          console.log("SIIIIIUKID", customerSubscription.id);
           await User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
               subscription: data._id,
               isSub: true,
+              stripeID: customerSubscription.id
             },
             {
               omitUndefined: true,
@@ -81,7 +82,7 @@ exports.stripewebhook = (req, res) => {
           new: true,
         }
       ).then((data) => {
-        mailjet.sendMailUnsub(data.email);
+        // mailjet.sendMailUnsub(data.email);
         Subscription.findByIdAndDelete(data.subscription);
       });
       break;
