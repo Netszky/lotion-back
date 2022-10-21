@@ -83,7 +83,8 @@ exports.stripewebhook = (req, res) => {
         }
       ).then((data) => {
         // mailjet.sendMailUnsub(data.email);
-        Subscription.findByIdAndDelete(data.subscription);
+        console.log("SIIIIUDATA", data);
+        // Subscription.findByIdAndDelete(data.subscription);
       });
       break;
     default:
