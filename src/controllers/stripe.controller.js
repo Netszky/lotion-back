@@ -1,7 +1,6 @@
 const config = require('../configs/stripe.configs');
 const stripe = require('stripe')(config.stripe.key)
 const User = require('../models/users.model');
-const Subscription = require('../models/subscription.model');
 
 
 
@@ -56,7 +55,7 @@ exports.getPrices = async function (req, res) {
 }
 
 exports.deleteSub = async function (req, res) {
-  await Subscription.findById({ user: req.user.user._id })
+  await User.findById(req.user.user._id)
     .then((data) => {
       console.log("SIUUUUUSERSTRIPEID", data);
       stripe.subscriptions.del(data.stripeID)
