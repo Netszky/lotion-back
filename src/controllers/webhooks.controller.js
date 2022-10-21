@@ -73,6 +73,7 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
+      console.log("SIIIIUSCRIPTON", data);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.user,
         {
