@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 app.use("*", cors());
 
 app.use(function (req, res, next) {
-  if (req.originalUrl === '/api/v1/webhook/stripe') {
-      next();
+  if (req.originalUrl === '/api/v1/stripe') {
+    next();
   } else {
-      express.json()(req, res, next);
+    express.json()(req, res, next);
   }
 });
 app.use("/api/v1", apiRouter);
