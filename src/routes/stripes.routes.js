@@ -7,7 +7,6 @@ const verifyToken = require('../middlewares/verifyToken');
 router.post('/checkout', verifyToken, stripe.createSession);
 router.get('/prices', verifyToken, stripe.getPrices);
 router.post("/cancel", verifyToken, stripe.deleteSub)
-// router.delete('/sub', verifyTokenSub, stripe.deleteSub);
 
 
 module.exports = router; 

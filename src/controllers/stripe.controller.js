@@ -1,6 +1,7 @@
 const config = require('../configs/stripe.configs');
 const stripe = require('stripe')(config.stripe.key)
 const User = require('../models/users.model');
+const Subscription = require('../models/subscription.model');
 
 
 
@@ -34,37 +35,6 @@ exports.createSession = async function (req, res) {
     res.status(500).json(err);
   }
 };
-
-
-// exports.createSubscription = async function (req, res) {
-//   const { payment_method, email, price } = req.body;
-
-//   const customer = await stripe.customers.create({
-//     payment_method: payment_method,
-//     email: email,
-//     invoice_settings: {
-//       default_payment_method: payment_method,
-//     },
-//   });
-
-//   const subscription = await stripe.subscriptions.create({
-//     customer: customer.id,
-//     // items: [
-//     //   {
-//     //     price: price
-//     //   }
-//     // ],
-//     metadata: {
-//       user: req.user.id,
-//       price: price,
-//       email: email
-//     }
-//   });
-
-//   const status = subscription.status
-//   const client_secret = subscription.client_secret
-//   res.json({ 'client_secret': client_secret, 'status': status });
-// };
 
 exports.getPrices = async function (req, res) {
   await stripe.prices.list({
