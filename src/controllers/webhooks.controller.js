@@ -73,9 +73,8 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
-      console.log("SIIIIUSCRIPTON", data);
       User.findByIdAndUpdate(
-        customerSubscriptionDeleted.metadata.user,
+        customerSubscriptionDeleted.metadata.userId,
         {
           isSub: false,
         },
@@ -85,7 +84,7 @@ exports.stripewebhook = (req, res) => {
       ).then((data) => {
         // mailjet.sendMailUnsub(data.email);
         console.log("SIIIIUDATA", data);
-        // Subscription.findByIdAndDelete(data.subscription);
+        Subscription.findByIdAndDelete(data.subscription);
       });
       break;
     default:
