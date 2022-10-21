@@ -44,15 +44,13 @@ exports.stripewebhook = (req, res) => {
       );
       sub
         .save()
-        .then((data) => {
-          console.log("SIUOK", data);
-
-          User.findByIdAndUpdate(
+        .then(async (data) => {
+          console.log("SIIIIIUKID", customerSubscription.metadata.userId);
+          await User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
               subscription: data._id,
               isSub: true,
-              stripeID: data.object.id
             },
             {
               omitUndefined: true,
