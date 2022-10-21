@@ -56,10 +56,9 @@ exports.getPrices = async function (req, res) {
 }
 
 exports.deleteSub = async function (req, res) {
-  console.log("SIIIIIIUUU", req.user.user._id);
-  await Subscription.findOne({ user: req.user.user._id })
+  await Subscription.findById({ user: req.user.user._id })
     .then((data) => {
-      console.log("SIUUUUUSERSTRIPEID", data.stripeID);
+      console.log("SIUUUUUSERSTRIPEID", data);
       stripe.subscriptions.del(data.stripeID)
         .then(() => {
           res.send({
