@@ -7,6 +7,7 @@ const Subscription = require("../models/subscription.model");
 const webhookSecret = config.stripe.webhook_secret;
 
 exports.stripewebhook = (req, res) => {
+  console.log("debut webhook");
   let data;
   let eventType;
 
@@ -21,12 +22,14 @@ exports.stripewebhook = (req, res) => {
         signature,
         webhookSecret
       );
+      console.log("SIUOK");
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`, err);
       return res.sendStatus(400);
     }
     data = event.data;
     eventType = event.type;
+    console.log("SIUOK2");
   } else {
     data = req.body.data;
     eventType = req.body.type;
