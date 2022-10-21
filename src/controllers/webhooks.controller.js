@@ -81,10 +81,16 @@ exports.stripewebhook = (req, res) => {
         {
           new: true,
         }
-      ).then((data) => {
-        // mailjet.sendMailUnsub(data.email);
+      ).then(async (data) => {
         console.log("SIIIIUDATA", data);
-        Subscription.findByIdAndDelete(data.subscription);
+        const exist = await Subscription.exists({ _id: data.subscription })
+        if (exist) {
+          await Subscription.findByIdAndDelete(data.subscription).then((data) => {
+            // mailjet.sendMailUnsub(data.email);
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
       });
       break;
     default:
