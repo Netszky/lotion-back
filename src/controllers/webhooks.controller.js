@@ -22,14 +22,12 @@ exports.stripewebhook = (req, res) => {
         signature,
         webhookSecret
       );
-      console.log("SIUOK");
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`, err);
       return res.sendStatus(400);
     }
     data = event.data;
     eventType = event.type;
-    console.log("SIUOK2");
   } else {
     data = req.body.data;
     eventType = req.body.type;
@@ -47,6 +45,8 @@ exports.stripewebhook = (req, res) => {
       sub
         .save()
         .then((data) => {
+          console.log("SIUOK", data);
+
           User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
@@ -58,10 +58,12 @@ exports.stripewebhook = (req, res) => {
               omitUndefined: true,
             }
           ).then(() => {
-            mailjet.sendMailSub(
-              customerSubscription.metadata.email,
-            );
-            return { Updated: true };
+            console.log("SIUOKUPDATE");
+
+            // mailjet.sendMailSub(
+            //   customerSubscription.metadata.email,
+            // );
+            // return { Updated: true };
           });
         })
         .catch((err) => {
