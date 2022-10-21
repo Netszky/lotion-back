@@ -4,7 +4,7 @@ const stripe = require('../controllers/stripe.controller');
 const verifyToken = require('../middlewares/verifyToken');
 // const verifyTokenSub = require('../middlewares/verifyTokenSub');
 
-router.post('/checkout', verifyToken, stripe.createSubscription);
+router.post('/checkout', verifyToken, stripe.createSession);
 router.get('/prices', verifyToken, stripe.getPrices);
 // router.delete('/sub', verifyTokenSub, stripe.deleteSub);
 
