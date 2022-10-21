@@ -14,6 +14,7 @@ exports.stripewebhook = (req, res) => {
     let event;
     let signature = req.headers["stripe-signature"];
 
+    console.log("SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIUUUUUUUUUUUUUUUUUUUU", signature);
     try {
       event = stripe.webhooks.constructEvent(
         req.body,

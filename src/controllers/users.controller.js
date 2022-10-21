@@ -51,6 +51,7 @@ exports.create = (req, res) => {
 exports.login = (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
+      console.log(user);
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordValid) {
         return res.status(401).send({
