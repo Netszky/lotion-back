@@ -7,7 +7,6 @@ const Subscription = require("../models/subscription.model");
 const webhookSecret = config.stripe.webhook_secret;
 
 exports.stripewebhook = (req, res) => {
-  console.log("debut webhook");
   let data;
   let eventType;
 
@@ -15,7 +14,6 @@ exports.stripewebhook = (req, res) => {
     let event;
     let signature = req.headers["stripe-signature"];
 
-    console.log("SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIUUUUUUUUUUUUUUUUUUUU", webhookSecret);
     try {
       event = stripe.webhooks.constructEvent(
         req.body,
@@ -45,7 +43,6 @@ exports.stripewebhook = (req, res) => {
       sub
         .save()
         .then(async (data) => {
-          console.log("SIIIIIUKID", customerSubscription.id);
           await User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
@@ -56,14 +53,13 @@ exports.stripewebhook = (req, res) => {
             {
               omitUndefined: true,
             }
-          ).then(() => {
-            console.log("SIUOKUPDATE");
-
-            // mailjet.sendMailSub(
-            //   customerSubscription.metadata.email,
-            // );
-            // return { Updated: true };
-          });
+          )
+          // .then(() => {
+          //   mailjet.sendMailSub(
+          //     customerSubscription.metadata.email,
+          //   );
+          //   return { Updated: true };
+          // });
         })
         .catch((err) => {
           res.status(500).send({
@@ -73,6 +69,7 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
+      
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
@@ -82,7 +79,6 @@ exports.stripewebhook = (req, res) => {
           new: true,
         }
       ).then(async (data) => {
-        console.log("SIIIIUDATA", data);
         const exist = await Subscription.exists({ _id: data.subscription })
         if (exist) {
           await Subscription.findByIdAndDelete(data.subscription).then((data) => {
