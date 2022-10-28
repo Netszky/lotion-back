@@ -1,5 +1,6 @@
 const Notes = require("../models/notes.model");
 const Dossier = require("../models/dossier.model");
+
 exports.create = (req, res) => {
     const note = new Notes({
         user: req.body.user,
@@ -25,11 +26,19 @@ exports.create = (req, res) => {
         .catch((err) => {
             res.status(500).send(err)
         })
-};
-
-exports.update = (req, res) => {
-
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(err);
+        });
+})
+    .catch ((err) => {
+    res.status(500).send(err);
+});
 }
+// exports.update = (req, res) => {
+
+// }
+
 
 exports.delete = async (req, res) => {
     const exist = await Notes.exists({ _id: req.query.id })
@@ -52,72 +61,108 @@ exports.delete = async (req, res) => {
         })
     } else {
         res.status(500).send({
-            message: "Objet Introuvable"
-        })
-    }
+            message: "Note Introuvable",
+        });
+    });
+} else {
+    res.status(500).send({
+        message: "Objet Introuvable",
+    });
+}
 };
 exports.getByStatus = (req, res) => {
     Notes.find({
         $and: [
             { user: { $eq: req.query.id } },
             { status: { $eq: req.query.status } },
-        ]
-    }).then((data) => {
-        res.status(200).send(data)
-    }).catch((err) => {
-        res.status(500).send(err)
+        ],
     })
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
 };
 
 exports.addToTrash = (req, res) => {
-    Notes.findByIdAndUpdate(req.body.id, {
-        status: 4
-    }, { omitUndefined: true })
+    Notes.findByIdAndUpdate(
+        req.body.id,
+        {
+            status: 4,
+        },
+        { omitUndefined: true }
+    )
         .then((data) => {
-            res.status(200).send(data)
-        }).catch((err) => {
-            res.status(500).send(err)
+            res.status(200).send(data);
         })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
 };
 exports.addToDraft = (req, res) => {
-    Notes.findByIdAndUpdate(req.body.id, {
-        status: 3
-    }, { omitUndefined: true })
+    Notes.findByIdAndUpdate(
+        req.body.id,
+        {
+            status: 3,
+        },
+        { omitUndefined: true }
+    )
         .then((data) => {
-            res.status(200).send(data)
-        }).catch((err) => {
-            res.status(500).send(err)
+            res.status(200).send(data);
         })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
 };
 exports.addToArchive = (req, res) => {
-    Notes.findByIdAndUpdate(req.body.id, {
-        status: 2
-    }, { omitUndefined: true })
+    Notes.findByIdAndUpdate(
+        req.body.id,
+        {
+            status: 2,
+        },
+        { omitUndefined: true }
+    )
         .then((data) => {
-            res.status(200).send(data)
-        }).catch((err) => {
-            res.status(500).send(err)
+            res.status(200).send(data);
         })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
 };
 exports.getNoteByFolder = (req, res) => {
     Notes.find({
-        $and: [
-            { dossier: { $eq: req.query.dossier } },
-            { status: { $eq: 1 } }
-        ]
-    }).then((data) => {
-        res.status(200).send(data)
-    }).catch((err) => {
-        console.log(err);
+        $and: [{ dossier: { $eq: req.query.dossier } }, { status: { $eq: 1 } }],
     })
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 exports.activate = (req, res) => {
-    Notes.findByIdAndUpdate(req.body.id, {
-        status: 1
-    }, { omitUndefined: true })
+    Notes.findByIdAndUpdate(
+        req.body.id,
+        {
+            status: 1,
+        },
+        { omitUndefined: true }
+    )
         .then((data) => {
-            res.status(200).send(data)
-        }).catch((err) => {
-            res.status(500).send(err)
+            res.status(200).send(data);
         })
-}
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+};
+
+exports.search = (req, res) => {
+    Notes.find({ name: { $regex: req.body.name } })
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            res.status(500).send(err);
+        });
+};
