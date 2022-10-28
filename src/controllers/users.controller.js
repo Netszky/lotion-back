@@ -14,12 +14,13 @@ exports.create = (req, res) => {
     password: hasedPassword,
     subscription: null,
   });
+
   user
     .save()
     .then((data) => {
       let userToken = jwt.sign(
         {
-          user: user,
+          user: {userId: user._id, userName: user.firstname, userLastName: user.lastname},
           auth: true,
         },
         configs.jwt.secret,
@@ -30,9 +31,10 @@ exports.create = (req, res) => {
       const email = sendEmail(user, userToken, 4278254, "Bienvenue");
       if (email.message === "Email Send") {
         res.status(200).send({
-          token: userToken,
           auth: true,
-          user: user,
+          token: userToken,
+          user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
+          isAdmin: user.isAdmin,
         });
       } else {
         res.status(500).send({
@@ -70,7 +72,7 @@ exports.login = (req, res) => {
       } else {
         let userToken = jwt.sign(
           {
-            user: user,
+            user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
@@ -79,9 +81,9 @@ exports.login = (req, res) => {
           }
         );
         res.status(200).send({
-          user: user,
           auth: true,
           token: userToken,
+          user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
           isAdmin: user.isAdmin,
         });
       }
@@ -138,11 +140,11 @@ exports.getUserAll = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.user.user._id, req.body, {
+  User.findByIdAndUpdate(req.user.user.userId, req.body, {
     new: true,
   })
     .then((data) => {
-      res.send({ user: data });
+      res.send({userId: data._id,userName: data.lastname,userLastName: data.firstname});
     })
     .catch((err) => res.status(500).json({ err: err }));
 };
