@@ -6,9 +6,10 @@ const notesSchema = new Schema({
         type: String,
         required: true
     },
-    elements: [{
-        type: Schema.Types.ObjectId, ref: "Element"
-    }],
+    elements: {
+        type: String,
+        default: null
+    },
     status: {
         type: Number,
         default: 3
