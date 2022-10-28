@@ -28,7 +28,19 @@ exports.create = (req, res) => {
         })
 }
 
-
+exports.update = (req, res) => {
+    Notes.findByIdAndUpdate(req.body.id,
+        {
+            elements: req.body.elements
+        }, {
+        new: true
+    }
+        , { omitUndefined: true }).then((data) => {
+            res.status(200).send(data)
+        }).catch((err) => {
+            res.status(500).send(err)
+        })
+};
 
 exports.delete = async (req, res) => {
     const exist = await Notes.exists({ _id: req.query.id })

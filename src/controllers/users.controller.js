@@ -20,7 +20,7 @@ exports.create = (req, res) => {
     .then((data) => {
       let userToken = jwt.sign(
         {
-          user: {userId: user._id, userName: user.firstname, userLastName: user.lastname},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
           auth: true,
         },
         configs.jwt.secret,
@@ -33,7 +33,7 @@ exports.create = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
           isAdmin: user.isAdmin,
         });
       } else {
@@ -72,7 +72,7 @@ exports.login = (req, res) => {
       } else {
         let userToken = jwt.sign(
           {
-            user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
+            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
@@ -83,7 +83,7 @@ exports.login = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user : {userId:user._id,userName:user.firstname,userLastName:user.lastname},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
           isAdmin: user.isAdmin,
         });
       }
@@ -144,7 +144,7 @@ exports.updateUser = (req, res) => {
     new: true,
   })
     .then((data) => {
-      res.send({userId: data._id,userName: data.lastname,userLastName: data.firstname});
+      res.send({ userId: data._id, userName: data.lastname, userLastName: data.firstname });
     })
     .catch((err) => res.status(500).json({ err: err }));
 };
