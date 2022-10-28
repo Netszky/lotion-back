@@ -4,15 +4,15 @@ exports.create = (req, res) => {
     const note = new Notes({
         user: req.body.user,
         name: req.body.name,
-        status: 3,
+        status: 1,
         url: null,
         elements: null,
         dossier: req.body.dossier
     })
     note.save()
         .then((data) => {
-            Dossier.findByIdAndUpdate(req.body.folder, {
-                $addToSet: {
+            Dossier.findByIdAndUpdate(req.body.dossier, {
+                $push: {
                     notes: data._id
                 }
             }, { omitUndefined: true }).then((update) => {
@@ -30,13 +30,20 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
 
 }
+
 exports.delete = async (req, res) => {
     const exist = await Notes.exists({ _id: req.query.id })
     console.log(req.query.id);
     if (exist) {
         await Notes.findByIdAndDelete(req.query.id).then((data) => {
-            res.status(200).send({
-                message: "Deleted"
+            Dossier.findByIdAndUpdate(data.dossier, {
+                $pull: {
+                    notes: req.query.id
+                }
+            }).then((dossier) => {
+                res.status(200).send({
+                    data
+                })
             })
         }).catch((err) => {
             res.status(500).send({
