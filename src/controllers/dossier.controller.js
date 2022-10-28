@@ -5,7 +5,7 @@ exports.create = (req, res) => {
         notes: [],
         sousdossier: [],
         user: req.body.id,
-        level: req.body.level,
+        level: req.body.level || 1,
         parent: req.body.parent,
         name: req.body.name
     })
@@ -56,4 +56,22 @@ exports.getSub = (req, res) => {
     }).catch((err) => {
         res.status(500).send(err)
     })
+}
+exports.delete = async (req, res) => {
+    const exist = await Dossier.exists({ _id: req.query.id })
+    if (exist) {
+        await Dossier.findByIdAndDelete(req.query.id).then((data) => {
+            res.status(200).send({
+                data
+            })
+        }).catch((err) => {
+            res.status(500).send({
+                message: "Note Introuvable"
+            })
+        })
+    } else {
+        res.status(500).send({
+            message: "Objet Introuvable"
+        })
+    }
 }

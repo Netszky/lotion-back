@@ -8,5 +8,6 @@ router.get("/dossiers", dossier.getAll);
 router.get("/dossierbyid", dossier.getFolder)
 router.get("/dossiers1", dossier.getLevel1);
 router.get("/dossier-sub", dossier.getSub);
+router.delete("/dossier", dossier.delete)
 
 module.exports = router;
