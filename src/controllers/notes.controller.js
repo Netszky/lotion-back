@@ -26,18 +26,8 @@ exports.create = (req, res) => {
         .catch((err) => {
             res.status(500).send(err)
         })
-        .catch((error) => {
-            console.log(error);
-            res.status(500).send(err);
-        });
-})
-    .catch ((err) => {
-    res.status(500).send(err);
-});
 }
-// exports.update = (req, res) => {
 
-// }
 
 
 exports.delete = async (req, res) => {
@@ -63,12 +53,7 @@ exports.delete = async (req, res) => {
         res.status(500).send({
             message: "Note Introuvable",
         });
-    });
-} else {
-    res.status(500).send({
-        message: "Objet Introuvable",
-    });
-}
+    };
 };
 exports.getByStatus = (req, res) => {
     Notes.find({
