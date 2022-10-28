@@ -29,7 +29,7 @@ exports.create = (req, res) => {
       );
       const email = sendEmail(user, userToken, 4278254, "Bienvenue");
       if (email.message === "Email Send") {
-        res.send({
+        res.status(200).send({
           token: userToken,
           auth: true,
           user: user,
@@ -51,7 +51,6 @@ exports.create = (req, res) => {
 exports.login = (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
-      console.log(user);
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordValid) {
         return res.status(401).send({

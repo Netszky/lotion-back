@@ -11,6 +11,7 @@ exports.create = (req, res) => {
     })
     note.save()
         .then((data) => {
+            console.log(data);
             Dossier.findByIdAndUpdate(req.body.folder, {
                 $addToSet: {
                     notes: data._id
