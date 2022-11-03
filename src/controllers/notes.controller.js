@@ -163,3 +163,28 @@ exports.search = (req, res) => {
             res.status(500).send(err);
         });
 };
+
+exports.shareNote = (req, res) => {
+    Notes.findById(req.query.id)
+        .then((data) => {
+            Notes.findByIdAndUpdate(data._id, {
+                $set: {
+                    isShared: !data.isShared
+                }
+            }, { omitUndefined: true }).then((data) => {
+                res.status(200).send(data)
+            })
+        })
+        .catch((err) => {
+            res.status(500).send(err)
+        })
+};
+
+exports.getNoteById = (req, res) => {
+    Notes.findById(req.query.id)
+        .then((data) => {
+            res.status(200).send(data)
+        }).catch((err) => {
+            res.status(500).send(err)
+        })
+};

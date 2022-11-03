@@ -31,6 +31,10 @@ const notesSchema = new Schema({
     },
     dossier: {
         type: Schema.Types.ObjectId, ref: "Dossier"
+    },
+    isShared: {
+        type: Boolean,
+        default: false
     }
 });
 module.exports = mongoose.model("Notes", notesSchema);

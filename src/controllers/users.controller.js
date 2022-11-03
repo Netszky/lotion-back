@@ -51,6 +51,7 @@ exports.create = (req, res) => {
     });
 };
 exports.login = (req, res) => {
+  console.log(req.body.email, req.body.password);
   User.findOne({ email: req.body.email })
     .then((user) => {
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
@@ -115,14 +116,14 @@ exports.findEmail = (req, res) => {
 
 exports.findOne = (req, res) => {
   //Via middleware
-  User.findById(req.user.id)
+  User.findById(req.user.user.userId).populate("subscription")
     .then((user) => {
       if (!user) {
-        res.status(404).send({
+        res.status(500).send({
           message: `Votre User id ${req.user.id} n'a pas été trouvé`,
         });
       }
-      return res.send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => res.send(err));
 };
