@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+  const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -24,8 +24,8 @@ const userSchema = new Schema({
     unique: true,
   },
   subscription: {
-    type: Schema.Types.ObjectId, ref:"Subscription"
-},
+    type: Schema.Types.ObjectId, ref: "Subscription"
+  },
   created: {
     type: Date,
     default: Date.now()

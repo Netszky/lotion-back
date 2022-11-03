@@ -15,7 +15,10 @@
     "express": "~4.16.1",
     "joi": "^17.6.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.5"
+    "mongoose": "^6.6.5",
+    "node-cron": "^3.0.2",
+    "node-mailjet": "^5.1.1",
+    "stripe": "^10.14.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

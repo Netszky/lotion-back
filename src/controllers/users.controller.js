@@ -2,6 +2,8 @@ const User = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const configs = require("../configs/jwt.configs");
+const Dossier = require("../models/dossier.model");
+const sendEmail = require("../helpers/sendEmail");
 
 exports.create = (req, res) => {
   let hasedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -17,7 +19,7 @@ exports.create = (req, res) => {
     .then((data) => {
       let userToken = jwt.sign(
         {
-          id: data._id,
+          user: user,
           auth: true,
         },
         configs.jwt.secret,
@@ -25,10 +27,19 @@ exports.create = (req, res) => {
           expiresIn: 86400,
         }
       );
-      res.send({
-        token: userToken,
-        auth: true,
-      });
+      const email = sendEmail(user, userToken, 4278254, "Bienvenue");
+      if (email.message === "Email Send") {
+        res.send({
+          token: userToken,
+          auth: true,
+          user: user,
+        });
+      } else {
+        res.status(500).send({
+          status: 500,
+          message: email.message,
+        });
+      }
     })
     .catch((err) => {
       res.status(500).send({
@@ -46,11 +57,20 @@ exports.login = (req, res) => {
           message: "password not valid",
           auth: false,
           token: null,
+          status: 401,
+        });
+      }
+      if (user === null || undefined) {
+        return res.status(401).send({
+          message: "user not valid",
+          auth: false,
+          token: null,
+          status: 401,
         });
       } else {
         let userToken = jwt.sign(
           {
-            id: user._id,
+            user: user,
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
@@ -59,6 +79,7 @@ exports.login = (req, res) => {
           }
         );
         res.status(200).send({
+          user: user,
           auth: true,
           token: userToken,
           isAdmin: user.isAdmin,
@@ -91,6 +112,7 @@ exports.findEmail = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
+  //Via middleware
   User.findById(req.user.id)
     .then((user) => {
       if (!user) {
@@ -116,13 +138,33 @@ exports.getUserAll = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.findByIdAndUpdate(req.user.id, req.body, {
+  User.findByIdAndUpdate(req.user.user._id, req.body, {
     new: true,
   })
     .then((data) => {
       res.send({ user: data });
     })
     .catch((err) => res.status(500).json({ err: err }));
+};
+
+exports.updatePassword = (req, res) => {
+  if (req.body.password) {
+    const hasedPassword = bcrypt.hashSync(req.body.password, 10);
+    User.findOneAndUpdate(
+      { resetToken: req.body.token },
+      { password: hasedPassword },
+      {
+        new: true,
+        omitUndefined: true,
+      }
+    )
+      .then(() => {
+        res.status(201).send({
+          updatePassword: true,
+        });
+      })
+      .catch((err) => res.status(500).json({ err: err }));
+  }
 };
 
 exports.deleteUser = (req, res, next) => {
@@ -137,4 +179,16 @@ exports.deleteUser = (req, res, next) => {
         error: error,
       });
     });
+};
+
+exports.verifyToken = (req, res) => {
+  if (req.user) {
+    res.status(200).send({
+      verify: true,
+    });
+  } else {
+    res.status(401).send({
+      verify: false,
+    });
+  }
 };
