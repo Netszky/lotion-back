@@ -34,13 +34,12 @@ exports.stripewebhook = (req, res) => {
   switch (eventType) {
     case "customer.subscription.created":
       const customerSubscription = data.object;
-      console.log("je suis customerSubscription = ", customerSubscription);
-      //   const sub = new Subscription({
-      //     dateSub: Date.now(),
-      //     idStripeSub: customerSubscription.id,
-      //     user: customerSubscription.metadata.user,
-      //     price: customerSubscription.metadata.price,
-      //   });
+      const sub = new Subscription({
+        dateSub: Date.now(),
+        idStripeSub: customerSubscription.id,
+        user: customerSubscription.metadata.user,
+        price: customerSubscription.metadata.price,
+      });
       sub
         .save()
         .then((data) => {
@@ -54,9 +53,7 @@ exports.stripewebhook = (req, res) => {
               new: true,
             }
           ).then(() => {
-            mailjet.sendMailSub(
-              customerSubscription.metadata.email,
-            );
+            mailjet.sendMailSub(customerSubscription.metadata.email);
             return { Updated: true };
           });
         })
@@ -68,6 +65,7 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
+      console.log("Je suis customerSubscriptionDeleted = ",customerSubscriptionDeleted);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.user,
         {
@@ -90,7 +88,6 @@ exports.stripewebhook = (req, res) => {
         );
       });
       break;
-    default:
   }
   res.sendStatus(200);
 };
