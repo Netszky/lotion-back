@@ -13,5 +13,7 @@ router.put('/note-archive', note.addToArchive);
 router.get("/note-folder", note.getNoteByFolder);
 router.put('/note-activate', note.activate);
 router.get('/note-search', note.search);
+router.get("/note-id", note.getNoteById);
+router.get("/note-share", note.shareNote);
 
 module.exports = router;

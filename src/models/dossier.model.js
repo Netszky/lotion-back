@@ -17,7 +17,7 @@ const dossierSchema = new Schema({
     },
     level: {
         type: Number,
-        default: 0
+        default: 1
     },
     parent: {
         type: Schema.Types.ObjectId, ref: "Dossier"

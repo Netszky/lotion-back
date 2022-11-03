@@ -7,9 +7,10 @@ const notesSchema = new Schema({
         lowercase: true,
         required: true
     },
-    elements: [{
-        type: Schema.Types.ObjectId, ref: "Element"
-    }],
+    elements: {
+        type: String,
+        default: null
+    },
     status: {
         type: Number,
         default: 3
@@ -31,6 +32,10 @@ const notesSchema = new Schema({
     },
     dossier: {
         type: Schema.Types.ObjectId, ref: "Dossier"
+    },
+    isShared: {
+        type: Boolean,
+        default: false
     }
 });
 module.exports = mongoose.model("Notes", notesSchema);
