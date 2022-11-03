@@ -187,4 +187,15 @@ exports.getNoteById = (req, res) => {
         }).catch((err) => {
             res.status(500).send(err)
         })
+        
+        exports.search = (req, res) => {
+  Notes.find({
+    name: { $regex: req.body.name.toLowerCase() }
+  })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };
