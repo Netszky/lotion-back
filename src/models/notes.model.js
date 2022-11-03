@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const notesSchema = new Schema({
     name: {
         type: String,
+        lowercase: true,
         required: true
     },
     elements: [{
