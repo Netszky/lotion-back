@@ -6,14 +6,15 @@ const cors = require("cors");
 
 const app = express();
 
-const corsOptions = {
-  origin: '*',
-  credentials: true,
-  optionSuccessStatus: 200,
-}
+// const corsOptions = {
+//   origin: '*',
+//   credentials: true,
+//   optionSuccessStatus: 200,
+// }
+
 
 // app.use(bodyParser.json());
-app.use(cors(corsOptions));
+app.use(cors({ origin: "*" }));
 
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", '*');
