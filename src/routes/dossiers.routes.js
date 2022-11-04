@@ -6,8 +6,8 @@ const verifyToken = require('../middlewares/verifyToken');
 router.post('/dossier', dossier.create);
 router.get("/dossiers", dossier.getAll);
 router.get("/dossierbyid", dossier.getFolder)
-router.get("/dossiers1", dossier.getLevel1);
-router.get("/dossier-sub", dossier.getSub);
-router.delete("/dossier", dossier.delete)
+router.get("/dossiers1", verifyToken, dossier.getLevel1);
+router.get("/dossier-sub", verifyToken, dossier.getSub);
+router.delete("/dossier", verifyToken, dossier.delete)
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Dossier = require("../models/dossier.model");
+const Note = require("../models/notes.model");
 
 exports.create = (req, res) => {
     const dossier = new Dossier({
@@ -61,6 +62,11 @@ exports.delete = async (req, res) => {
     const exist = await Dossier.exists({ _id: req.query.id })
     if (exist) {
         await Dossier.findByIdAndDelete(req.query.id).then((data) => {
+            data.notes.forEach(async note => {
+                await Note.findOneAndDelete(note).then((data) => {
+                    console.log(data);
+                })
+            });
             res.status(200).send({
                 data
             })
