@@ -1,6 +1,6 @@
 
-const getDateEndToSub = (dateCreated) => {
-    const dateCreated = new Date(dateCreated);
+const getDateEndToSub = (createdDate) => {
+    const dateCreated = new Date(createdDate);
 
     const date = new Date();
     
