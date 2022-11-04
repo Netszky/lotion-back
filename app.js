@@ -8,7 +8,13 @@ const app = express();
 
 mongoose.connectDb();
 
-app.use(cors({ origin: "*" }));
+const corsOptions = {
+    origin: ["*", "http://localhost:3000", "localhost", "localhost:3000"],
+    credentials: true,
+    optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions));
 app.use(function (req, res, next) {
     if (req.originalUrl === '/api/v1/stripe') {
         next();
