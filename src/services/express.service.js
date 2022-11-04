@@ -8,6 +8,8 @@ const app = express();
 
 // app.use(bodyParser.json());
 
+// app.use("*", cors());
+app.use(cors())
 
 app.use(function (req, res, next) {
   if (req.originalUrl === '/api/v1/stripe') {
@@ -18,7 +20,6 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
-app.use("*", cors());
 // app.use(function (req, res, next) {
 //   // res.header("Access-Control-Allow-Credentials", true);
 //   // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
