@@ -155,7 +155,7 @@ exports.activate = (req, res) => {
 };
 
 exports.search = (req, res) => {
-    Notes.find({ name: { $regex: req.query.name } })
+    Notes.find({ name: { $regex: req.query.name }, user: { $eq: req.user.user.userId } })
         .then((data) => {
             res.status(200).send(data);
         })
