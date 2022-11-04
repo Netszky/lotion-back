@@ -54,12 +54,12 @@ exports.stripewebhook = (req, res) => {
               omitUndefined: true,
             }
           )
-          // .then(() => {
-          //   mailjet.sendMailSub(
-          //     customerSubscription.metadata.email,
-          //   );
-          //   return { Updated: true };
-          // });
+          .then(() => {
+            // mailjet.sendMailSub(
+            //   customerSubscription.metadata.email,
+            // );
+            return { Updated: true };
+          });
         })
         .catch((err) => {
           res.status(500).send({
@@ -69,7 +69,7 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
-      
+      console.log("Je suis customerSubscriptionDeleted = ",customerSubscriptionDeleted);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
@@ -82,6 +82,7 @@ exports.stripewebhook = (req, res) => {
         const exist = await Subscription.exists({ _id: data.subscription })
         if (exist) {
           await Subscription.findByIdAndDelete(data.subscription).then((data) => {
+            console.log(data);
             // mailjet.sendMailUnsub(data.email);
           }).catch((err) => {
             console.log(err);
