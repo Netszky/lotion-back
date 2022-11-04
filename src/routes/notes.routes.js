@@ -4,7 +4,7 @@ const note = require('../controllers/notes.controller');
 const verifyToken = require('../middlewares/verifyToken');
 
 router.post('/note', note.create);
-// router.put("/update-note", note.update);
+router.put("/update-note", note.update);
 router.delete('/note', note.delete);
 router.get('/note-status', note.getByStatus);
 router.put('/note-trash', note.addToTrash);
