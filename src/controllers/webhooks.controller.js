@@ -3,7 +3,7 @@ const stripe = require("stripe")(config.stripe.key);
 const User = require("../models/users.model");
 const Subscription = require("../models/subscription.model");
 // const mailjet = require("../services/mailjet.service");
-import getDateEndToSub from "../helpers/getDateEndToSub";
+const GetDateEndToSub = require("../helpers/getDateEndToSub")
 
 const webhookSecret = config.stripe.webhook_secret;
 
@@ -73,7 +73,7 @@ exports.stripewebhook = (req, res) => {
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
       console.log("Je suis customerSubscriptionDeleted = ",customerSubscriptionDeleted);
-      getDateEndToSub(customerSubscriptionDeleted.create_date)
+      GetDateEndToSub(customerSubscriptionDeleted.create_date)
       return
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
