@@ -6,7 +6,11 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors())
+// app.use(cors(
+//   { origin: "*" }
+// )
+// )
+app.use('*', cors())
 
 // app.use(bodyParser.json());
 
@@ -19,7 +23,6 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
-app.use(cors())
 
 exports.start = () => {
   const port = process.env.PORT;

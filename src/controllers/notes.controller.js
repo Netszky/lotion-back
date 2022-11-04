@@ -200,7 +200,7 @@ exports.getNoteById = (req, res) => {
 
 exports.search = (req, res) => {
     Notes.find({
-        name: { $regex: req.body.name.toLowerCase() }, user: { $eq: req.user.user.userId },
+        name: { $regex: req.query.name.toLowerCase() }, user: { $eq: req.user.user.userId },
     })
         .then((data) => {
             res.status(200).send(data);
@@ -208,4 +208,4 @@ exports.search = (req, res) => {
         .catch((err) => {
             res.status(500).send(err);
         });
-};
+};  
