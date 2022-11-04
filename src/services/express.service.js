@@ -7,14 +7,7 @@ const cors = require("cors");
 const app = express();
 
 // app.use(bodyParser.json());
-app.use("*", cors());
-app.use(function (req, res, next) {
-  // res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Origin", '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  next();
-});
+
 
 app.use(function (req, res, next) {
   if (req.originalUrl === '/api/v1/stripe') {
@@ -24,6 +17,21 @@ app.use(function (req, res, next) {
   }
 });
 app.use("/api/v1", apiRouter);
+
+app.use("*", cors());
+app.use(function (req, res, next) {
+  // res.header("Access-Control-Allow-Credentials", true);
+  // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept Authorization,content-type,application/json ');
+  if (req.method === "OPTIONS") {
+    res.header(
+      "Access-Control-Allow-Methods",
+      "POST, PUT, PATCH, GET, DELETE"
+    )
+  }
+  next();
+});
 
 exports.start = () => {
   const port = process.env.PORT;
