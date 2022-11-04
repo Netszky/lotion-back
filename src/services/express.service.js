@@ -6,8 +6,9 @@ const cors = require("cors");
 
 const app = express();
 
-// app.use(bodyParser.json());
+app.use(cors())
 
+// app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
   if (req.originalUrl === '/api/v1/stripe') {
