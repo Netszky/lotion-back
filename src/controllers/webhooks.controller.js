@@ -43,6 +43,8 @@ exports.stripewebhook = (req, res) => {
       sub
         .save()
         .then(async (data) => {
+          console.log("Je suis customerSubscription.metadata.userId = ",customerSubscription.metadata.userId);
+          console.log("Je suis customerSubscription.id = ",customerSubscription.id);
           await User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
