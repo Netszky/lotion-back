@@ -25,6 +25,7 @@ app.use(function (req, res, next) {
   }
 });
 app.use("/api/v1", apiRouter);
+app.use(bodyParser.json({ limit: '50mb' }));
 
 
 exports.start = () => {
