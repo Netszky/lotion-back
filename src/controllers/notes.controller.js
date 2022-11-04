@@ -168,16 +168,6 @@ exports.activate = (req, res) => {
         });
 };
 
-exports.search = (req, res) => {
-    Notes.find({ name: { $regex: req.query.name }, user: { $eq: req.user.user.userId } })
-        .then((data) => {
-            res.status(200).send(data);
-        })
-        .catch((err) => {
-            res.status(500).send(err);
-        });
-};
-
 exports.shareNote = (req, res) => {
     Notes.findById(req.query.id)
         .then((data) => {
@@ -207,9 +197,10 @@ exports.getNoteById = (req, res) => {
             res.status(500).send(err);
         });
 };
+
 exports.search = (req, res) => {
     Notes.find({
-        name: { $regex: req.body.name.toLowerCase() },
+        name: { $regex: req.body.name.toLowerCase() }, user: { $eq: req.user.user.userId },
     })
         .then((data) => {
             res.status(200).send(data);
