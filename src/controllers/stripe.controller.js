@@ -3,8 +3,6 @@ const stripe = require('stripe')(config.stripe.key)
 const User = require('../models/users.model');
 
 
-
-
 const initiateStripeSession = async (req) => {
   const subscription = await stripe.checkout.sessions.create({
     line_items: [

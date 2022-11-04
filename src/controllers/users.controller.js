@@ -51,7 +51,6 @@ exports.create = (req, res) => {
     });
 };
 exports.login = (req, res) => {
-  console.log(req.body.email, req.body.password);
   User.findOne({ email: req.body.email })
     .then((user) => {
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
