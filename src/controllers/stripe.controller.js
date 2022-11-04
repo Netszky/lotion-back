@@ -11,8 +11,9 @@ const initiateStripeSession = async (req) => {
       { price: req.body.priceId, quantity: 1 },
     ],
     subscription_data: {
+
       metadata: {
-        userId: req.user.user._id,
+        userId: req.user.user.userId,
         email: req.body.email
       },
     },
