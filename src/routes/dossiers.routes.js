@@ -3,7 +3,7 @@ const router = express.Router();
 const dossier = require('../controllers/dossier.controller');
 const verifyToken = require('../middlewares/verifyToken');
 
-router.post('/dossier', dossier.create);
+router.post('/dossier', verifyToken, dossier.create);
 router.get("/dossiers", dossier.getAll);
 router.get("/dossierbyid", dossier.getFolder)
 router.get("/dossiers1", verifyToken, dossier.getLevel1);
