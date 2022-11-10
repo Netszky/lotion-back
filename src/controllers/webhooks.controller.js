@@ -3,7 +3,7 @@ const stripe = require("stripe")(config.stripe.key);
 const User = require("../models/users.model");
 const Subscription = require("../models/subscription.model");
 // const mailjet = require("../services/mailjet.service");
-const GetDateEndToSub = require("../helpers/getDateEndToSub")
+const GetDateEndToSub = require("../helpers/getDateEndToSub");
 
 const webhookSecret = config.stripe.webhook_secret;
 
@@ -38,8 +38,7 @@ exports.stripewebhook = (req, res) => {
       const sub = new Subscription({
         active: true,
         subName: data.object.plan.id,
-      }
-      );
+      });
       sub
         .save()
         .then(async (data) => {
@@ -48,13 +47,12 @@ exports.stripewebhook = (req, res) => {
             {
               subscription: data._id,
               isSub: true,
-              stripeID: customerSubscription.id
+              stripeID: customerSubscription.id,
             },
             {
               omitUndefined: true,
             }
-          )
-          .then(() => {
+          ).then(() => {
             // mailjet.sendMailSub(
             //   customerSubscription.metadata.email,
             // );
@@ -69,8 +67,8 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
-      const enddDate = GetDateEndToSub(customerSubscriptionDeleted.created)
-      console.log("Je suis enddDate après la fonction = ",enddDate);
+      const enddDate = GetDateEndToSub(customerSubscriptionDeleted.created);
+      console.log("Je suis enddDate après la fonction = ", enddDate);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
@@ -81,17 +79,25 @@ exports.stripewebhook = (req, res) => {
         }
       ).then(async (data) => {
         console.log("Je rentre dans le then");
-        const exist = await Subscription.exists({ _id: data.subscription })
-        console.log("Je suis data.subscription = ",data.subscription);
+        const exist = await Subscription.exists({ _id: data.subscription });
+        console.log("Je suis data.subscription = ", data.subscription);
         if (exist) {
-          await Subscription.findByIdAndUpdate(data.subscription, {
-            cancel_date: enddDate
-          }).then((data) => {
-            console.log("Je suis data = ",data);
-            // mailjet.sendMailUnsub(data.email);
-          }).catch((err) => {
-            console.log(err);
-          });
+          await Subscription.findByIdAndUpdate(
+            data.subscription,
+            {
+              cancel_date: enddDate,
+            },
+            {
+              new: true
+            }
+          )
+            .then((data) => {
+              console.log("Je suis data = ", data);
+              // mailjet.sendMailUnsub(data.email);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       });
       break;
