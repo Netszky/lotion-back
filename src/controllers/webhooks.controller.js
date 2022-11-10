@@ -4,6 +4,7 @@ const User = require("../models/users.model");
 const Subscription = require("../models/subscription.model");
 // const mailjet = require("../services/mailjet.service");
 const GetDateEndToSub = require("../helpers/getDateEndToSub")
+const getTodayDate = require("../helpers/getTodayDate")
 
 const webhookSecret = config.stripe.webhook_secret;
 
@@ -38,7 +39,8 @@ exports.stripewebhook = (req, res) => {
       console.log("je suis customerSubscription = ", customerSubscription);
       const sub = new Subscription({
         active: true,
-        subName: data.object.plan.id
+        subName: data.object.plan.id,
+        created: getTodayDate()
       }
       );
       sub
