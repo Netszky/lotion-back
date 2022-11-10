@@ -20,7 +20,7 @@ exports.create = (req, res) => {
     .then((data) => {
       let userToken = jwt.sign(
         {
-          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub },
           auth: true,
         },
         configs.jwt.secret,
@@ -73,7 +73,7 @@ exports.login = (req, res) => {
       } else {
         let userToken = jwt.sign(
           {
-            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
+            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub},
             isAdmin: user.isAdmin,
           },
           configs.jwt.secret,
@@ -84,7 +84,7 @@ exports.login = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname},
           isAdmin: user.isAdmin,
         });
       }
