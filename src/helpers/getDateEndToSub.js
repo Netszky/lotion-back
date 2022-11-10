@@ -7,11 +7,15 @@ const getDateEndToSub = (createdDate) => {
 
     const date = new Date();
 
-    console.log("Je suis today = ",today);
+    console.log("Je suis date = ",date);
     
     const month = dateCreated.getMonth();
+
+    console.log("Je suis month = ",month);
     
     let day = date.getDate();
+
+    console.log("Je suis date = ",date);
     
     const newDate = new Date(`${month + 2}-${day}`)
     
