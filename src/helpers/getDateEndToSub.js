@@ -11,7 +11,7 @@ const getDateEndToSub = (createdDate) => {
     const humanDateFormat = dateObject
     
     //mois actuel + 1
-    var month = today.getUTCMonth() + 2; //months from 1-12
+    var month = today.getUTCMonth() + 1; //months from 1-12
     //Jour de la creation de l'abonnement
     var day = humanDateFormat.getUTCDate();
     
