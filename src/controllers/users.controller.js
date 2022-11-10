@@ -122,7 +122,7 @@ exports.findOne = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(500).send({
-          message: `Votre User id ${req.user.id} n'a pas été trouvé`,
+          message: `Votre User id ${req.user.user.userId} n'a pas été trouvé`,
         });
       }
       return res.status(200).send(user);
