@@ -1,5 +1,6 @@
 const Notes = require("../models/notes.model");
 const Dossier = require("../models/dossier.model");
+const key = require("../configs/mailjet.config");
 
 exports.create = (req, res) => {
     const note = new Notes({
@@ -178,7 +179,7 @@ exports.shareNote = (req, res) => {
                         isShared: !data.isShared,
                     },
                 },
-                { omitUndefined: true }
+                { new: true, omitUndefined: true }
             ).then((data) => {
                 res.status(200).send(data);
             });
@@ -208,4 +209,70 @@ exports.search = (req, res) => {
         .catch((err) => {
             res.status(500).send(err);
         });
-};  
+};
+exports.addColab = (req, res) => {
+    Notes.findByIdAndUpdate(req.body.id, {
+        $push: {
+            collaborators: req.body.collaborators
+        }
+    }, { new: true, omitUndefined: true })
+        .then((data) => {
+            res.status(200).send(data)
+            try {
+                const Mailjet = require("node-mailjet");
+                const mailjet = new Mailjet({
+                    apiKey: key.publicKey,
+                    apiSecret: key.privateKey,
+                });
+
+                const request = mailjet.post("send", { version: "v3.1" }).request({
+                    Messages: [
+                        {
+                            From: {
+                                Email: "julien.chigot@ynov.com",
+                                Name: "Notee",
+                            },
+                            To: [
+                                {
+                                    Email: req.body.email,
+                                    // Name: req.body.firstname,
+                                },
+                            ],
+                            TemplateID: 4348497,
+                            TemplateLanguage: true,
+                            Subject: "Collaboration",
+                            Variables: {
+                                firstname: req.user.user.userName,
+                                email: req.body.email,
+                                title: req.body.title,
+                                url: req.body.url,
+                            },
+                        },
+                    ],
+                });
+                return { message: "Email Send" };
+            } catch (error) {
+                return { message: error };
+            }
+        })
+        .catch((err) => {
+            res.status(500).send("nok")
+        })
+}
+exports.removeColab = (req, res) => {
+    Notes.findByIdAndUpdate(req.body.id, {
+        $pull: {
+            collaborators: req.body.collaborators
+        }
+    }, { new: true, omitUndefined: true })
+        .then((data) => {
+            res.status(200).send(data)
+
+        })
+        .catch((err) => {
+            res.status(500).send("nok")
+        })
+}
+
+
+

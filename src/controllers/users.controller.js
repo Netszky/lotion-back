@@ -51,7 +51,7 @@ exports.create = (req, res) => {
     });
 };
 exports.login = (req, res) => {
-  User.findOne({ email: req.body.email })
+  User.findOne({ email: req.body.email.toLowerCase() })
     .then((user) => {
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordValid) {
@@ -72,8 +72,7 @@ exports.login = (req, res) => {
       } else {
         let userToken = jwt.sign(
           {
-            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub},
-            isAdmin: user.isAdmin,
+            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub },
           },
           configs.jwt.secret,
           {
@@ -83,7 +82,7 @@ exports.login = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
           isAdmin: user.isAdmin,
         });
       }
@@ -121,7 +120,7 @@ exports.findOne = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(500).send({
-          message: `Votre User id ${req.user.id} n'a pas été trouvé`,
+          message: `Votre User id ${req.user.user.userId} n'a pas été trouvé`,
         });
       }
       return res.status(200).send(user);
@@ -185,12 +184,11 @@ exports.deleteUser = (req, res, next) => {
     });
 };
 
-exports.verifyToken = (req, res) => {
+exports.refreshToken = (req, res) => {
   if (req.user) {
     let userToken = jwt.sign(
       {
-        user: { userId: req.user._id, userName: req.user.firstname, userLastName: req.user.lastname, subscription: req.user.isSub},
-        isAdmin: req.user.isAdmin,
+        user: { userId: req.user.user.userId, userName: req.user.user.userName, userLastName: req.user.user.userLastName, isSub: true },
       },
       configs.jwt.secret,
       {
@@ -198,8 +196,7 @@ exports.verifyToken = (req, res) => {
       }
     );
     res.status(200).send({
-      verify: true,
-      newToken: userToken
+      refreshToken: userToken
     });
   } else {
     res.status(401).send({
@@ -207,3 +204,26 @@ exports.verifyToken = (req, res) => {
     });
   }
 };
+
+
+exports.verifyToken = (req, res) => {
+  if (req.user) {
+    res.status(200).send({
+      verify: true,
+    });
+  } else {
+    res.status(401).send({
+      verify: false,
+    });
+  }
+};
+
+exports.search = (req, res) => {
+  User.find({
+    email: { $regex: req.query.email.toLowerCase() }
+  }).then((data) => {
+    res.status(200).send(data)
+  }).catch((err) => {
+    res.status(500).send(err)
+  })
+}
