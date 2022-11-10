@@ -72,8 +72,8 @@ exports.stripewebhook = (req, res) => {
       break;
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
-      const createdDate = GetDateEndToSub(customerSubscriptionDeleted.created)
-      console.log("Je suis createdDate après la fonction = ",createdDate);
+      const enddDate = GetDateEndToSub(customerSubscriptionDeleted.created)
+      console.log("Je suis createdDate après la fonction = ",enddDate);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
@@ -85,7 +85,9 @@ exports.stripewebhook = (req, res) => {
       ).then(async (data) => {
         const exist = await Subscription.exists({ _id: data.subscription })
         if (exist) {
-          await Subscription.findByIdAndDelete(data.subscription).then((data) => {
+          await Subscription.findByIdAndUpdate(data.subscription, {
+            cancel_date: enddDate
+          }).then((data) => {
             console.log(data);
             // mailjet.sendMailUnsub(data.email);
           }).catch((err) => {
