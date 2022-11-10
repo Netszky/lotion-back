@@ -188,7 +188,7 @@ exports.refreshToken = (req, res) => {
   if (req.user) {
     let userToken = jwt.sign(
       {
-        user: { userId: req.user.user.userId, userName: req.user.user.userName, userLastName: req.user.user.userLastName, subscription: req.user.user.isSub },
+        user: { userId: req.user.user.userId, userName: req.user.user.userName, userLastName: req.user.user.userLastName, isSub: true },
       },
       configs.jwt.secret,
       {
