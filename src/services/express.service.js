@@ -3,6 +3,8 @@ const express = require("express");
 const apiRouter = require("../routes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cron = require("cron");
+const verifDateSub = require("../helpers/verifDateSub");
 
 const app = express();
 
@@ -10,7 +12,7 @@ const app = express();
 app.use(cors());
 
 app.use(function (req, res, next) {
-  if (req.originalUrl === '/api/v1/stripe') {
+  if (req.originalUrl === "/api/v1/stripe") {
     next();
   } else {
     express.json()(req, res, next);
@@ -18,6 +20,14 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
+cron.job(
+  "0 0 0 * * *",
+  () => {
+    verifDateSub();
+  },
+  null,
+  true
+);
 
 exports.start = () => {
   const port = process.env.PORT;
