@@ -2,8 +2,6 @@ const User = require("../models/users.model");
 const Subscription = require("../models/subscription.model");
 
 const verifDateSub = () => {
-  console.log("Je rentre dans le cron");
-
   User.find()
     .populate("Subscription")
     .then((users) => {
