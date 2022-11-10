@@ -21,6 +21,7 @@ router.post('/users/updatePassword', user.updatePassword)
 router.delete('/users', verifyToken, user.deleteUser)
 
 router.get("/users/verifyToken", verifyToken, user.verifyToken);
+router.get("/user-search", user.search)
 
 router.get("/user/refreshToken", verifyToken, user.refreshToken)
 

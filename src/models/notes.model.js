@@ -36,6 +36,9 @@ const notesSchema = new Schema({
     isShared: {
         type: Boolean,
         default: false
-    }
+    },
+    collaborators: [{
+        type: Schema.Types.ObjectId, ref: "User"
+    }]
 });
 module.exports = mongoose.model("Notes", notesSchema);

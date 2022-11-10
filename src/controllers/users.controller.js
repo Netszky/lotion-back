@@ -52,7 +52,7 @@ exports.create = (req, res) => {
 };
 exports.login = (req, res) => {
   console.log(req.body.email, req.body.password);
-  User.findOne({ email: req.body.email })
+  User.findOne({ email: req.body.email.toLowerCase() })
     .then((user) => {
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordValid) {
@@ -220,3 +220,13 @@ exports.verifyToken = (req, res) => {
     });
   }
 };
+
+exports.search = (req, res) => {
+  User.find({
+    email: { $regex: req.query.email.toLowerCase() }
+  }).then((data) => {
+    res.status(200).send(data)
+  }).catch((err) => {
+    res.status(500).send(err)
+  })
+}

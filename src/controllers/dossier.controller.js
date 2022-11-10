@@ -81,3 +81,19 @@ exports.delete = async (req, res) => {
         })
     }
 }
+
+exports.rename = (req, res) => {
+    Dossier.findByIdAndUpdate(req.body.id, {
+        name: req.body.name
+    }, { omitUndefinded: true })
+        .then((data) => {
+            res.status(200).send({
+                message: "Modifié"
+            })
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Errur"
+            })
+        })
+}; 
