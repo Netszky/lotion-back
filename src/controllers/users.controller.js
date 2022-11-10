@@ -186,7 +186,7 @@ exports.deleteUser = (req, res, next) => {
     });
 };
 
-exports.verifyToken = (req, res) => {
+exports.refreshToken = (req, res) => {
   if (req.user) {
     let userToken = jwt.sign(
       {
@@ -199,8 +199,20 @@ exports.verifyToken = (req, res) => {
       }
     );
     res.status(200).send({
+      refreshToken: userToken
+    });
+  } else {
+    res.status(401).send({
+      verify: false,
+    });
+  }
+};
+
+
+exports.verifyToken = (req, res) => {
+  if (req.user) {
+    res.status(200).send({
       verify: true,
-      newToken: userToken
     });
   } else {
     res.status(401).send({
