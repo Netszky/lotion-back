@@ -84,7 +84,7 @@ exports.login = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub},
           isAdmin: user.isAdmin,
         });
       }
