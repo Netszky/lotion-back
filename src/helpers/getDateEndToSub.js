@@ -17,7 +17,6 @@ const getDateEndToSub = (createdDate) => {
     
     var year = today.getUTCFullYear();
 
-
     return new Date(year, month, day)
 }
 
