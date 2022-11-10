@@ -73,8 +73,7 @@ exports.login = (req, res) => {
       } else {
         let userToken = jwt.sign(
           {
-            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub},
-            isAdmin: user.isAdmin,
+            user: { userId: user._id, userName: user.firstname, userLastName: user.lastname, subscription: user.isSub },
           },
           configs.jwt.secret,
           {
@@ -84,7 +83,7 @@ exports.login = (req, res) => {
         res.status(200).send({
           auth: true,
           token: userToken,
-          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname},
+          user: { userId: user._id, userName: user.firstname, userLastName: user.lastname },
           isAdmin: user.isAdmin,
         });
       }
@@ -187,11 +186,11 @@ exports.deleteUser = (req, res, next) => {
 };
 
 exports.refreshToken = (req, res) => {
+  console.log(req.user);
   if (req.user) {
     let userToken = jwt.sign(
       {
-        user: { userId: req.user._id, userName: req.user.firstname, userLastName: req.user.lastname, subscription: req.user.isSub},
-        isAdmin: req.user.isAdmin,
+        user: { userId: req.user.user.userId, userName: req.user.user.userName, userLastName: req.user.user.userLastName, subscription: req.user.user.isSub },
       },
       configs.jwt.secret,
       {
