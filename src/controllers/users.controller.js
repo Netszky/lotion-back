@@ -51,7 +51,6 @@ exports.create = (req, res) => {
     });
 };
 exports.login = (req, res) => {
-  console.log(req.body.email, req.body.password);
   User.findOne({ email: req.body.email.toLowerCase() })
     .then((user) => {
       let passwordValid = bcrypt.compareSync(req.body.password, user.password);
@@ -186,7 +185,6 @@ exports.deleteUser = (req, res, next) => {
 };
 
 exports.refreshToken = (req, res) => {
-  console.log(req.user);
   if (req.user) {
     let userToken = jwt.sign(
       {
