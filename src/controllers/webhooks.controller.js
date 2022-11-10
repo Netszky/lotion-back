@@ -35,7 +35,6 @@ exports.stripewebhook = (req, res) => {
   switch (eventType) {
     case "customer.subscription.created":
       const customerSubscription = data.object;
-      console.log("je suis customerSubscription = ", customerSubscription);
       const sub = new Subscription({
         active: true,
         subName: data.object.plan.id,
@@ -44,8 +43,6 @@ exports.stripewebhook = (req, res) => {
       sub
         .save()
         .then(async (data) => {
-          console.log("Je suis customerSubscription.metadata.userId = ",customerSubscription.metadata.userId);
-          console.log("Je suis customerSubscription.id = ",customerSubscription.id);
           await User.findByIdAndUpdate(
             customerSubscription.metadata.userId,
             {
@@ -73,7 +70,7 @@ exports.stripewebhook = (req, res) => {
     case "customer.subscription.deleted":
       const customerSubscriptionDeleted = data.object;
       const enddDate = GetDateEndToSub(customerSubscriptionDeleted.created)
-      console.log("Je suis createdDate après la fonction = ",enddDate);
+      console.log("Je suis enddDate après la fonction = ",enddDate);
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
@@ -83,6 +80,7 @@ exports.stripewebhook = (req, res) => {
           new: true,
         }
       ).then(async (data) => {
+        console.log("Je rentre dans le then");
         const exist = await Subscription.exists({ _id: data.subscription })
         if (exist) {
           await Subscription.findByIdAndUpdate(data.subscription, {
