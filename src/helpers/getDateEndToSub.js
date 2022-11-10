@@ -1,6 +1,6 @@
 
 const getDateEndToSub = (createdDate) => {
-    console.log("Je suis dans la fonction");
+    console.log("Je le params createdDate = ",createdDate);
     const dateCreated = new Date(createdDate);
 
     console.log("Je suis dateCreated = ",dateCreated);
