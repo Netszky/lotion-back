@@ -188,8 +188,19 @@ exports.deleteUser = (req, res, next) => {
 
 exports.verifyToken = (req, res) => {
   if (req.user) {
+    let userToken = jwt.sign(
+      {
+        user: { userId: req.user._id, userName: req.user.firstname, userLastName: req.user.lastname, subscription: req.user.isSub},
+        isAdmin: req.user.isAdmin,
+      },
+      configs.jwt.secret,
+      {
+        expiresIn: 86400,
+      }
+    );
     res.status(200).send({
       verify: true,
+      newToken: userToken
     });
   } else {
     res.status(401).send({
