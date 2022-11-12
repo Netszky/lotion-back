@@ -57,7 +57,6 @@ exports.update = (req, res) => {
 
 exports.delete = async (req, res) => {
     const exist = await Notes.exists({ _id: req.query.id });
-    console.log(req.query.id);
     if (exist) {
         await Notes.findByIdAndDelete(req.query.id)
             .then((data) => {
