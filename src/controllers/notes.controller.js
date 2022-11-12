@@ -273,5 +273,15 @@ exports.removeColab = (req, res) => {
         })
 }
 
+exports.getShared = (req, res) => {
+    Notes.find({ collaborators: req.user.user.userId })
+        .then((data) => {
+            res.status(200).send(data)
+        })
+        .catch((err) => {
+            res.status(500).send(err)
+        })
+}
+
 
 

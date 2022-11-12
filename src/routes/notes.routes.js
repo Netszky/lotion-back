@@ -17,5 +17,6 @@ router.get("/note-id", verifyToken, note.getNoteById);
 router.get("/note-share", verifyToken, note.shareNote);
 router.put("/note-collab", verifyToken, note.addColab);
 router.put("/note-rcollab", verifyToken, note.removeColab);
+router.get("/note-shared", verifyToken, note.getShared);
 
 module.exports = router;
