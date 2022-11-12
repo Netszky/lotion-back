@@ -44,8 +44,8 @@ exports.update = (req, res) => {
         },
         {
             new: true,
+            omitUndefined: true
         },
-        { omitUndefined: true }
     )
         .then((data) => {
             res.status(200).send(data);
