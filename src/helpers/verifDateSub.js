@@ -7,6 +7,7 @@ const verifDateSub = () => {
     .then((users) => {
       users.forEach(async (user) => {
          if (user.subscription !== null) {
+             console.log("je suis user = ",user)
              if(user.subscription.cancel_date !== null) {
                 console.log(user.email);
                 if (new Date() >= user.subscription.cancel_date) {
