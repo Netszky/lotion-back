@@ -22,9 +22,11 @@ const verifDateSub = () => {
             }
           } else {
             console.log("SIIIIIIIIIOUF");
+            return
           }
         } else {
           console.log("pas user");
+          return
         }
       })
     });
