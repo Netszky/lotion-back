@@ -6,8 +6,9 @@ const verifDateSub = () => {
     .populate("subscription")
     .then((users) => {
       users.forEach((user) => {
-        if (new Date() >= user.subscription.cancel_date) {
-          Subscription.findByIdAndRemove(user.subscription);
+        console.log(user.subscription);
+        if (new Date() >= user.subscription?.cancel_date) {
+          Subscription.findByIdAndRemove(user.subscription._id);
           User.findByIdAndUpdate(user._id, { isSub: false });
         }
       });
