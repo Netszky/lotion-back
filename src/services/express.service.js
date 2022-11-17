@@ -21,7 +21,7 @@ app.use(function (req, res, next) {
 app.use("/api/v1", apiRouter);
 
 cron.job(
-  "0 0 0 * * *",
+  "* * * * *",
   () => {
     verifDateSub();
   },
