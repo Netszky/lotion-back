@@ -14,7 +14,13 @@ const verifDateSub = () => {
                     console.log("email to delete", user.email);
                     const exist = Subscription.exists({ _id: user.subscription._id })
                     if (exist) {
-
+                        Subscription.findByIdAndDelete(user.subscription._id).then((data) => {
+                                console.log("user to delete", data)
+                                User.findByIdAndUpdate(user._id,
+                                    { subscription:null,isSub: true }, { new: true, omitUndefined: true }
+                                ).then((data) => console.log(data))
+                            }
+                        );
                     } else {
                         console.log("not exist")
                     }
