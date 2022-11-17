@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const cron = require("cron");
 const verifDateSub = require("../helpers/verifDateSub");
-
+const nodeCron = require("node-cron")
 const app = express();
 
 // app.use(cors({ origin: "*" }));
@@ -20,14 +20,19 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
- cron.job(
-   "* * * * *",
-   () => {
-    verifDateSub();
-  },
-     () => console.log("FINI"),
-  true
-);
+const job = nodeCron.schedule("* * *  * *", function jobYouNeedToExecute() {
+    // Do whatever you want in here. Send email, Make  database backup or download data.
+    verifDateSub()
+});
+
+ //cron.job(
+  // "* * * * *",
+   //() => {
+    //verifDateSub();
+  //},
+    // () => console.log("FINI"),
+  //true
+//);
 
 exports.start = () => {
   const port = process.env.PORT;
