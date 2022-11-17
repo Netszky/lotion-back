@@ -16,7 +16,7 @@ const verifDateSub = () => {
         //       await Subscription.findByIdAndDelete(user.subscription._id).then((data) => {
         //         console.log("user to delete", data)
         //         User.findByIdAndUpdate(user._id,
-        //           { isSub: false }, { new: true, omitUndefined: true }
+        //           { subscription:null,isSub: false }, { new: true, omitUndefined: true }
         //         ).then((data) => console.log(data))
         //       }
         //       );
