@@ -30,7 +30,7 @@ const sendEmail = (body, token, templateID, subject) => {
             email: body.email,
             message: body.message,
             //add url to page redirection
-            url: `http://localhost:3000/reset-password?token=${token}`,
+            url: `${process.env.APP_URL}reset-password?token=${token}`,
           },
         },
       ],
