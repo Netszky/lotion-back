@@ -3,7 +3,7 @@ const Subscription = require("../models/subscription.model");
 
 const verifDateSub = () => {
   User.find()
-    .populate("Subscription")
+    .populate("subscription")
     .then((users) => {
       users.forEach((user) => {
         if (new Date() >= user.subscription.cancel_date) {
