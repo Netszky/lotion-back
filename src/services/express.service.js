@@ -25,7 +25,7 @@ app.use("/api/v1", apiRouter);
    () => {
     verifDateSub();
   },
-  null,
+     () => console.log("FINI"),
   true
 );
 

@@ -8,7 +8,6 @@ const GetDateEndToSub = require("../helpers/getDateEndToSub");
 const webhookSecret = config.stripe.webhook_secret;
 
 exports.stripewebhook = (req, res) => {
-  console.log("webhook")
   let data;
   let eventType;
 
