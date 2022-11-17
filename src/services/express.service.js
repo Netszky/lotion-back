@@ -20,14 +20,14 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
-// cron.job(
-//   "* * * * *",
-//   () => {
-//     verifDateSub();
-//   },
-//   null,
-//   true
-// );
+ cron.job(
+   "* * * * *",
+   () => {
+    verifDateSub();
+  },
+  null,
+  true
+);
 
 exports.start = () => {
   const port = process.env.PORT;
