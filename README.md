@@ -1,8 +1,9 @@
-# lotion-back
+# Notee-back
 
-# main -> Vercel
-# preProd -> preProd
-# dev -> develop
+## Groupe 3:
 
-# Ne pas oublier :
-# - npm i
+- Julien CHIGOT
+- Léo PEYRE
+- Aaron SAKSIK
+- Maxime HUERTAS
+- Salavudeen HADJI
