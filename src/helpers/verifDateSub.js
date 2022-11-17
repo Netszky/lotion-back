@@ -6,7 +6,7 @@ const verifDateSub = () => {
     .populate("subscription")
     .then((users) => {
       users.forEach(async (user) => {
-        if (user.subscription.cancel_date) {
+        if (user.subscription.cancel_date !== null) {
           if (new Date() >= user.subscription?.cancel_date) {
             console.log("email to delete", user.email);
             const exist = await Subscription.exists({ _id: user.subscription._id })
