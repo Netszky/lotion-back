@@ -143,6 +143,7 @@ exports.getUserAll = (req, res) => {
 exports.updateUser = (req, res) => {
   User.findByIdAndUpdate(req.user.user.userId, req.body, {
     new: true,
+    omitUndefined: true
   })
     .then((data) => {
       res.send({ userId: data._id, userName: data.lastname, userLastName: data.firstname });
