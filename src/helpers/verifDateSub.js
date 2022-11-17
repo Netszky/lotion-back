@@ -30,6 +30,7 @@ const verifDateSub = () => {
                }
              } else {
                  console.log("pas de cancel date")
+                 return
              }
 
          } else {
