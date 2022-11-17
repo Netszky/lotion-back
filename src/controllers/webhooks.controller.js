@@ -71,7 +71,7 @@ exports.stripewebhook = (req, res) => {
       User.findByIdAndUpdate(
         customerSubscriptionDeleted.metadata.userId,
         {
-          isSub: false,
+          isSub: true,
         },
         {
           new: true,
