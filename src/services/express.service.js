@@ -20,19 +20,11 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1", apiRouter);
 
-const job = nodeCron.schedule("* * *  * *", function jobYouNeedToExecute() {
-    // Do whatever you want in here. Send email, Make  database backup or download data.
-    verifDateSub()
-});
+// const job = nodeCron.schedule("* * *  * *", function jobYouNeedToExecute() {
+//     // Do whatever you want in here. Send email, Make  database backup or download data.
+//     verifDateSub()
+// });
 
- //cron.job(
-  // "* * * * *",
-   //() => {
-    //verifDateSub();
-  //},
-    // () => console.log("FINI"),
-  //true
-//);
 
 exports.start = () => {
   const port = process.env.PORT;
